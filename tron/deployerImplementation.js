@@ -30,7 +30,7 @@ module.exports.deploy = async function(inputFile, feeLimit, energyLimit, userFee
   };
 
   function findImports (_path) {
-    if(_path.includes("openzeppelin-solidity"))
+    if(_path.includes("openzeppelin-contracts"))
         return { contents: fs.readFileSync("node_modules/" + _path, 'utf8') }
     else
         return { contents: fs.readFileSync(path.join(__dirname, "./contracts/", _path), 'utf8') }

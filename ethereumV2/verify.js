@@ -29,7 +29,7 @@ const compilationInput = {
 };
 
 function findImports (_path) {
-    if(_path.includes("openzeppelin-solidity"))
+    if(_path.includes("openzeppelin-contracts"))
         return { contents: fs.readFileSync(path.join(__dirname, "./../node_modules/" + _path), 'ascii') }
     else
         return { contents: fs.readFileSync(path.join(__dirname, "./../contracts/" + _path), 'ascii') }

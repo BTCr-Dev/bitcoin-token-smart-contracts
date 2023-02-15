@@ -1,6 +1,6 @@
 pragma solidity 0.4.24;
 
-import "openzeppelin-solidity/contracts/token/ERC20/BasicToken.sol";
+import "openzeppelin-contracts/contracts/token/ERC20/BasicToken.sol";
 
 
 contract BasicTokenMock is BasicToken {

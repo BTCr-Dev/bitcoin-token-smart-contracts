@@ -1,8 +1,8 @@
 const BigNumber = web3.BigNumber;
 
 const { ZEPPELIN_LOCATION, ZERO_ADDRESS } = require("../helper.js");
-const { assertRevert } = require(ZEPPELIN_LOCATION + 'openzeppelin-solidity/test/helpers/assertRevert');
-const { inLogs } = require(ZEPPELIN_LOCATION + 'openzeppelin-solidity/test/helpers/expectEvent');
+const { assertRevert } = require(ZEPPELIN_LOCATION + 'openzeppelin-contracts/test/helpers/assertRevert');
+const { inLogs } = require(ZEPPELIN_LOCATION + 'openzeppelin-contracts/test/helpers/expectEvent');
 
 require('chai')
   .use(require('chai-bignumber')(BigNumber))

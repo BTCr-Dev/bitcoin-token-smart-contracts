@@ -1,5 +1,5 @@
 const { ZEPPELIN_LOCATION } = require("../helper.js");
-const { expectThrow } = require(ZEPPELIN_LOCATION + 'openzeppelin-solidity/test/helpers/expectThrow');
+const { expectThrow } = require(ZEPPELIN_LOCATION + 'openzeppelin-contracts/test/helpers/expectThrow');
 
 const BTCR = artifacts.require("./token/BTCR.sol")
 const Members = artifacts.require("./factory/Members.sol")

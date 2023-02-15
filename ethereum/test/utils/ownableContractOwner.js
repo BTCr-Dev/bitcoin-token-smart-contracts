@@ -1,8 +1,8 @@
 const BigNumber = web3.BigNumber
 
 const { ZEPPELIN_LOCATION , ZERO_ADDRESS} = require("../helper.js");
-const { expectThrow } = require(ZEPPELIN_LOCATION + 'openzeppelin-solidity/test/helpers/expectThrow');
-const { ethSendTransaction, ethGetBalance } = require(ZEPPELIN_LOCATION + 'openzeppelin-solidity/test/helpers/web3');
+const { expectThrow } = require(ZEPPELIN_LOCATION + 'openzeppelin-contracts/test/helpers/expectThrow');
+const { ethSendTransaction, ethGetBalance } = require(ZEPPELIN_LOCATION + 'openzeppelin-contracts/test/helpers/web3');
 
 require("chai")
     .use(require("chai-as-promised"))

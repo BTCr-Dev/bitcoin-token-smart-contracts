@@ -1,5 +1,5 @@
 const { ZEPPELIN_LOCATION, ZERO_ADDRESS } = require("../helper.js");
-const { assertRevert } = require(ZEPPELIN_LOCATION + 'openzeppelin-solidity/test/helpers/assertRevert');
+const { assertRevert } = require(ZEPPELIN_LOCATION + 'openzeppelin-contracts/test/helpers/assertRevert');
 
 function shouldBehaveLikeBasicToken ([owner, recipient, anotherAccount]) {
 
