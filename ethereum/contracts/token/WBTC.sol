@@ -8,7 +8,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/PausableToken.sol";
 import "../utils/OwnableContract.sol";
 
 
-contract WBTC is StandardToken, DetailedERC20("Wrapped BTC", "WBTC", 8),
+contract BTCR is StandardToken, DetailedERC20("Wrapped BTC", "BTCR", 8),
     MintableToken, BurnableToken, PausableToken, OwnableContract {
 
     function burn(uint value) public onlyOwner {

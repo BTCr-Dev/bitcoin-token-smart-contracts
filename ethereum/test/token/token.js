@@ -5,7 +5,7 @@ const { shouldBehaveLikeMintableToken } = require("./MintableToken.behaviour.js"
 const { shouldBehaveLikePausableToken } = require("./PausableToken.behaviour.js")
 const { shouldBehaveLikeBurnableToken } = require("./BurnableToken.behaviour.js")
 
-const Token = artifacts.require("./token/WBTC.sol");
+const Token = artifacts.require("./token/BTCR.sol");
 
 contract('shouldBehaveLikeDetailedERC20', function (accounts) {
     const initialBalance = 100;
@@ -15,7 +15,7 @@ contract('shouldBehaveLikeDetailedERC20', function (accounts) {
         this.detailedERC20 = await Token.new({ from: owner });
     });
 
-    shouldBehaveLikeDetailedERC20(accounts, "Wrapped BTC", "WBTC", 8);
+    shouldBehaveLikeDetailedERC20(accounts, "Wrapped BTC", "BTCR", 8);
 });
 
 

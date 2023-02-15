@@ -25,7 +25,7 @@ const compilationInput = {
     "Factory.sol" : fs.readFileSync(factoryContractPath + 'Factory.sol', 'ascii'),
     "Members.sol" : fs.readFileSync(factoryContractPath + 'Members.sol', 'ascii'),
     "MembersInterface.sol" : fs.readFileSync(factoryContractPath + 'MembersInterface.sol', 'ascii'),
-    "WBTC.sol" : fs.readFileSync(tokenContractPath + 'WBTC.sol', 'ascii')
+    "BTCR.sol" : fs.readFileSync(tokenContractPath + 'BTCR.sol', 'ascii')
 };
 
 function findImports (_path) {
@@ -39,7 +39,7 @@ const mainnetUrls = ['https://mainnet.infura.io',
                      'https://api.mycryptoapi.com/eth'];
 
 
-const wbtcAddress = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
+const btcrAddress = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
 
 checkAll();
 
@@ -50,10 +50,10 @@ async function checkAll() {
 
 
 async function check(mainnetUrl) {
-    console.log("wbtc address", wbtcAddress);
+    console.log("btcr address", btcrAddress);
     console.log("web3 url", mainnetUrl);
 
-    let wbtcTotalSupply = 0;
+    let btcrTotalSupply = 0;
     let btcTotalInventory = 0;
 
     web3 = new Web3(new Web3.providers.HttpProvider(mainnetUrl));
@@ -64,13 +64,13 @@ async function check(mainnetUrl) {
     else console.log(solcOutput.errors);
     console.log("finished compilation");
 
-    const wbtcContract = await getContractAndCompareCode("WBTC",wbtcAddress,solcOutput);
-    const totalSupply = await wbtcContract.methods.totalSupply().call();
+    const btcrContract = await getContractAndCompareCode("BTCR",btcrAddress,solcOutput);
+    const totalSupply = await btcrContract.methods.totalSupply().call();
     console.log("totalSupply", totalSupply.toString());
 
-    wbtcTotalSupply = parseFloat(totalSupply) / (10**8);
+    btcrTotalSupply = parseFloat(totalSupply) / (10**8);
 
-    const controllerAddress = await wbtcContract.methods.owner().call();
+    const controllerAddress = await btcrContract.methods.owner().call();
     console.log("Controller", controllerAddress);
     const controllerContract = await getContractAndCompareCode("Controller",controllerAddress,solcOutput);
     console.log("Controller owner", await controllerContract.methods.owner().call());
@@ -103,9 +103,9 @@ async function check(mainnetUrl) {
     }
 
     console.log("BTC in custoday", btcTotalInventory);
-    console.log("WBTC total supply", wbtcTotalSupply);
-    if(btcTotalInventory >= wbtcTotalSupply) console.log("BTC in custody >= WBTC total supply, ok");
-    else console.log("error: BTC in custody < WBTC total supply");
+    console.log("BTCR total supply", btcrTotalSupply);
+    if(btcTotalInventory >= btcrTotalSupply) console.log("BTC in custody >= BTCR total supply, ok");
+    else console.log("error: BTC in custody < BTCR total supply");
 
     console.log("\n\n\n");
 }

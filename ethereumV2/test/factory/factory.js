@@ -8,7 +8,7 @@ require("chai")
     .use(require('chai-bignumber')(BigNumber))
     .should()
 
-const WBTC = artifacts.require("./token/WBTC.sol")
+const BTCR = artifacts.require("./token/BTCR.sol")
 const Members = artifacts.require("./factory/Members.sol")
 const Controller = artifacts.require("./controller/Controller.sol")
 const Factory = artifacts.require("./factory/Factory.sol")
@@ -48,16 +48,16 @@ contract('Factory', function(accounts) {
     const txid2 = "a2f2bd19f2d294eec53e0421069c82b949253260c2cadf54eb1f823856923799"
 
     beforeEach('create contracts', async function () {
-        wbtc = await WBTC.new();
-        controller = await Controller.new(wbtc.address);
+        btcr = await BTCR.new();
+        controller = await Controller.new(btcr.address);
         members = await Members.new(admin);
         factory = await Factory.new(controller.address);
 
         await controller.setFactory(factory.address)
         await controller.setMembers(members.address)
 
-        await wbtc.transferOwnership(controller.address)
-        await controller.callClaimOwnership(wbtc.address)
+        await btcr.transferOwnership(controller.address)
+        await controller.callClaimOwnership(btcr.address)
 
         await members.setCustodian(custodian0);
         await members.addMerchant(merchant0);
@@ -96,7 +96,7 @@ contract('Factory', function(accounts) {
         });
 
         it("addMintRequest", async function () {
-            const balanceBefore = await wbtc.balanceOf(merchant0)
+            const balanceBefore = await btcr.balanceOf(merchant0)
             assert.equal(balanceBefore, 0);
 
             const { logs } = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from});
@@ -114,7 +114,7 @@ contract('Factory', function(accounts) {
             assert.equal(request[REQUEST_HASH_FIELD], hash)
 
             // verify balance is still 0 (actual mint is not done yet)
-            const balanceAfter = await wbtc.balanceOf(merchant0)
+            const balanceAfter = await btcr.balanceOf(merchant0)
             assert.equal(balanceAfter, 0);
         });
 
@@ -249,13 +249,13 @@ contract('Factory', function(accounts) {
             const { logs } = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from});
             await factory.confirmMintRequest(logs[0].args.requestHash, {from: custodian0})
 
-            const balanceBefore = await wbtc.balanceOf(merchant0);
+            const balanceBefore = await btcr.balanceOf(merchant0);
             assert.equal(balanceBefore, amount);
 
-            await wbtc.approve(factory.address, amount, {from});
+            await btcr.approve(factory.address, amount, {from});
             await factory.burn(amount, {from});
 
-            const balanceAfter = await wbtc.balanceOf(merchant0)
+            const balanceAfter = await btcr.balanceOf(merchant0)
             assert.equal(balanceAfter, 0);
         });
 
@@ -263,16 +263,16 @@ contract('Factory', function(accounts) {
             const { logs } = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant2, {from: merchant2});
             await factory.confirmMintRequest(logs[0].args.requestHash, {from: custodian0});
 
-            const balanceBefore = await wbtc.balanceOf(merchant2)
+            const balanceBefore = await btcr.balanceOf(merchant2)
             assert.equal(balanceBefore, amount);
 
-            await wbtc.approve(factory.address, amount, {from: merchant2});
+            await btcr.approve(factory.address, amount, {from: merchant2});
             await expectThrow(factory.burn(amount, {from: merchant2}), "merchant asset deposit address was not set");
 
             await factory.setMerchantDepositAddress(merchant0DepositAddress, {from: merchant2});
             await factory.burn(amount, {from: merchant2})
 
-            const balanceAfter = await wbtc.balanceOf(merchant2)
+            const balanceAfter = await btcr.balanceOf(merchant2)
             assert.equal(balanceAfter, 0);
         });
 
@@ -286,7 +286,7 @@ contract('Factory', function(accounts) {
         it("burn without being the configured factory in controller fails", async function () {
             const { logs } = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from: merchant0});
             await factory.confirmMintRequest(logs[0].args.requestHash, {from: custodian0})
-            await wbtc.approve(factory.address, amount, {from: merchant0});
+            await btcr.approve(factory.address, amount, {from: merchant0});
             await controller.setFactory(other);
             await expectThrow(
                     factory.burn(amount, {from: merchant0}),
@@ -297,7 +297,7 @@ contract('Factory', function(accounts) {
         it("burn sets request status to pending", async function () {
             const { logs } = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from});
             await factory.confirmMintRequest(logs[0].args.requestHash, {from: custodian0})
-            await wbtc.approve(factory.address, amount, {from});
+            await btcr.approve(factory.address, amount, {from});
             await factory.burn(amount, {from});
 
             const request = await factory.getBurnRequest(0);
@@ -307,7 +307,7 @@ contract('Factory', function(accounts) {
         it("burn emits an event", async function () {
             const addTx = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from});
             await factory.confirmMintRequest(addTx.logs[0].args.requestHash, {from: custodian0})
-            await wbtc.approve(factory.address, amount, {from});
+            await btcr.approve(factory.address, amount, {from});
             const { logs } = await factory.burn(amount, {from});
 
             assert.equal(logs.length, 1);
@@ -393,12 +393,12 @@ contract('Factory', function(accounts) {
         it("confirmMintRequest", async function () {
             const tx = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from: merchant0});
 
-            const balanceBefore = await wbtc.balanceOf(merchant0)
+            const balanceBefore = await btcr.balanceOf(merchant0)
             assert.equal(balanceBefore, 0);
 
             await factory.confirmMintRequest(tx.logs[0].args.requestHash, {from});
 
-            const balanceAfter = await wbtc.balanceOf(merchant0)
+            const balanceAfter = await btcr.balanceOf(merchant0)
             assert.equal(balanceAfter, amount);
         });
         
@@ -446,12 +446,12 @@ contract('Factory', function(accounts) {
             assert.notEqual(tx1.logs[0].args.requestHash,tx2.logs[0].args.requestHash);
             assert.notEqual(tx0.logs[0].args.requestHash,tx2.logs[0].args.requestHash);
             
-            const balanceBefore = await wbtc.balanceOf(merchant0)
+            const balanceBefore = await btcr.balanceOf(merchant0)
             assert.equal(balanceBefore, 0);
 
             await factory.confirmMintRequest(tx1.logs[0].args.requestHash, {from});
 
-            const balanceAfter = await wbtc.balanceOf(merchant0)
+            const balanceAfter = await btcr.balanceOf(merchant0)
             assert.equal(balanceAfter, amount);
         });
 
@@ -561,7 +561,7 @@ contract('Factory', function(accounts) {
         it("confirmBurnRequest", async function () {
             const { logs } = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from: merchant0});
             await factory.confirmMintRequest(logs[0].args.requestHash, {from})
-            await wbtc.approve(factory.address, amount, {from: merchant0});
+            await btcr.approve(factory.address, amount, {from: merchant0});
             const tx = await factory.burn(amount, {from: merchant0});
             await factory.confirmBurnRequest(tx.logs[0].args.requestHash, txid0, {from});
 
@@ -576,7 +576,7 @@ contract('Factory', function(accounts) {
         it("confirmBurnRequest with non exsting request hash", async function () {
             const { logs } = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from: merchant0});
             await factory.confirmMintRequest(logs[0].args.requestHash, {from})
-            await wbtc.approve(factory.address, amount, {from: merchant0});
+            await btcr.approve(factory.address, amount, {from: merchant0});
             await factory.burn(amount, {from: merchant0});
             await expectThrow(
                     factory.confirmBurnRequest("hash", txid0, {from}),
@@ -588,7 +588,7 @@ contract('Factory', function(accounts) {
             const tx = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from: merchant0});
             await factory.confirmMintRequest(tx.logs[0].args.requestHash, {from})
 
-            await wbtc.approve(factory.address, amount, {from: merchant0});
+            await btcr.approve(factory.address, amount, {from: merchant0});
             const tx0 = await factory.burn(amount / 4 , {from: merchant0});
             const tx1 = await factory.burn(amount / 4 , {from: merchant0});
             const tx2 = await factory.burn(amount / 4 , {from: merchant0});
@@ -609,7 +609,7 @@ contract('Factory', function(accounts) {
         it("confirmBurnRequest does change the request hash", async function () {
             const { logs } = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from: merchant0});
             await factory.confirmMintRequest(logs[0].args.requestHash, {from})
-            await wbtc.approve(factory.address, amount, {from: merchant0});
+            await btcr.approve(factory.address, amount, {from: merchant0});
 
             await factory.burn(amount, {from: merchant0});
             const requestBefore = await factory.getBurnRequest(0);
@@ -621,7 +621,7 @@ contract('Factory', function(accounts) {
         it("confirmBurnRequest emits an event", async function () {
             const tx = await factory.addMintRequest(amount, txid0, custodianDepositAddressForMerchant0, {from: merchant0});
             await factory.confirmMintRequest(tx.logs[0].args.requestHash, {from})
-            await wbtc.approve(factory.address, amount, {from: merchant0});
+            await btcr.approve(factory.address, amount, {from: merchant0});
 
             await factory.burn(amount, {from: merchant0});
             const request = await factory.getBurnRequest(0);
@@ -701,7 +701,7 @@ contract('Factory', function(accounts) {
             const lengthBefore = await factory.getBurnRequestsLength();
             assert.equal(lengthBefore, 0);
 
-            await wbtc.approve(factory.address, amount, {from});
+            await btcr.approve(factory.address, amount, {from});
             await factory.burn(amount/3, {from});
             await factory.burn(amount/3, {from});
             await factory.burn(amount/3, {from});

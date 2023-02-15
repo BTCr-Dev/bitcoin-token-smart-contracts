@@ -1,7 +1,7 @@
 const { ZEPPELIN_LOCATION } = require("../helper.js");
 const { expectThrow } = require(ZEPPELIN_LOCATION + 'openzeppelin-solidity/test/helpers/expectThrow');
 
-const WBTC = artifacts.require("./token/WBTC.sol")
+const BTCR = artifacts.require("./token/BTCR.sol")
 const Members = artifacts.require("./factory/Members.sol")
 const Controller = artifacts.require("./controller/Controller.sol")
 const BasicTokenMock = artifacts.require('BasicTokenMock');
@@ -13,21 +13,21 @@ contract('Controller', function(accounts) {
     const factory = accounts[2]; // factory simulated as a regular address here
     const otherFactory = accounts[3];
 
-    let wbtc;
+    let btcr;
     let controller;
     let members;
 
-    beforeEach('create controller and transfer wbtc ownership to it', async function () {
-        wbtc = await WBTC.new();
-        controller = await Controller.new(wbtc.address);
+    beforeEach('create controller and transfer btcr ownership to it', async function () {
+        btcr = await BTCR.new();
+        controller = await Controller.new(btcr.address);
         members = await Members.new(admin);
         otherToken = await BasicTokenMock.new(admin, 100);
 
         await controller.setFactory(factory)
         await controller.setMembers(members.address)
 
-        await wbtc.transferOwnership(controller.address)
-        await controller.callClaimOwnership(wbtc.address)
+        await btcr.transferOwnership(controller.address)
+        await controller.callClaimOwnership(btcr.address)
     });
 
     describe('as owner', function () {
@@ -86,22 +86,22 @@ contract('Controller', function(accounts) {
         });
 
         it("should check transfer succeeds when not paused.", async function () {
-            const balanceBefore = await wbtc.balanceOf(admin)
+            const balanceBefore = await btcr.balanceOf(admin)
             assert.equal(balanceBefore, 0);
 
             await controller.mint(admin, 100, {from: factory});
-            const balanceAfterMint = await wbtc.balanceOf(admin);
+            const balanceAfterMint = await btcr.balanceOf(admin);
             assert.equal(balanceAfterMint, 100);
 
-            await wbtc.transfer(other, 20);
-            const balanceAfterTransfer = await wbtc.balanceOf(admin)
+            await btcr.transfer(other, 20);
+            const balanceAfterTransfer = await btcr.balanceOf(admin)
             assert.equal(balanceAfterTransfer, 80);
         });
 
         it("should check transfer fails after pause.", async function () {
             await controller.mint(admin, 100, {from: factory});
             await controller.pause();
-            await expectThrow(wbtc.transfer(other, 20));
+            await expectThrow(btcr.transfer(other, 20));
         });
 
         it("should check mint fails after pause.", async function () {
@@ -114,7 +114,7 @@ contract('Controller', function(accounts) {
 
             // when burning through factory we only need to approve.
             // here we transfer since checking internally.
-            await wbtc.transfer(controller.address, 20, {from: factory})
+            await btcr.transfer(controller.address, 20, {from: factory})
             await controller.pause();
             await expectThrow(controller.burn(20, {from: factory}));
         });
@@ -127,21 +127,21 @@ contract('Controller', function(accounts) {
 
         it("should check transfer succeeds after unpause.", async function () {
             await controller.mint(admin, 100, {from: factory});
-            const balanceBefore = await wbtc.balanceOf(admin)
+            const balanceBefore = await btcr.balanceOf(admin)
             assert.equal(balanceBefore, 100);
 
             await controller.pause();
-            const isPausedBefore = await wbtc.paused.call();
+            const isPausedBefore = await btcr.paused.call();
             assert.equal(isPausedBefore, true);
 
-            await expectThrow(wbtc.transfer(other, 20));
+            await expectThrow(btcr.transfer(other, 20));
 
             await controller.unpause();
-            const isPausedAfter = await wbtc.paused.call();
+            const isPausedAfter = await btcr.paused.call();
             assert.equal(isPausedAfter, false);
 
-            await wbtc.transfer(other, 20);
-            const balanceAfterTransfer = await wbtc.balanceOf(admin)
+            await btcr.transfer(other, 20);
+            const balanceAfterTransfer = await btcr.balanceOf(admin)
             assert.equal(balanceAfterTransfer, 80);
         });
 
@@ -181,11 +181,11 @@ contract('Controller', function(accounts) {
 
     describe('as factory', function () {
         it("mint", async function () {
-            const balanceBefore = await wbtc.balanceOf(admin)
+            const balanceBefore = await btcr.balanceOf(admin)
             assert.equal(balanceBefore, 0);
 
             await controller.mint(admin, 100, {from: factory});
-            const balanceAfter = await wbtc.balanceOf(admin);
+            const balanceAfter = await btcr.balanceOf(admin);
             assert.equal(balanceAfter, 100);
         });
 
@@ -194,31 +194,31 @@ contract('Controller', function(accounts) {
         });
 
         it("mint of token that controller does not own should fail", async function () {
-            await controller.callTransferOwnership(wbtc.address, admin)
-            await wbtc.claimOwnership()
+            await controller.callTransferOwnership(btcr.address, admin)
+            await btcr.claimOwnership()
             await expectThrow(controller.mint(admin, 100, {from: factory}));
         });
 
         it("burn", async function () {
             await controller.mint(factory, 100, {from: factory});
 
-            const balanceBefore = await wbtc.balanceOf(factory)
+            const balanceBefore = await btcr.balanceOf(factory)
             assert.equal(balanceBefore, 100);
 
             // when burning through factory we only need to approve.
             // here we transfer since checking internally.
-            await wbtc.transfer(controller.address, 20, {from: factory})
+            await btcr.transfer(controller.address, 20, {from: factory})
             await controller.burn(20, {from: factory});
-            const balanceAfter = await wbtc.balanceOf(factory);
+            const balanceAfter = await btcr.balanceOf(factory);
             assert.equal(balanceAfter, 80);
         });
 
         it("burn of token that controller does not own should fail", async function () {
             await controller.mint(factory, 100, {from: factory});
-            await wbtc.transfer(controller.address, 20, {from: factory})
+            await btcr.transfer(controller.address, 20, {from: factory})
 
-            await controller.callTransferOwnership(wbtc.address, admin)
-            await wbtc.claimOwnership()
+            await controller.callTransferOwnership(btcr.address, admin)
+            await btcr.claimOwnership()
 
             await expectThrow(controller.burn(20, {from: factory}));
         });
@@ -231,12 +231,12 @@ contract('Controller', function(accounts) {
         it("burn reverts.", async function () {
             await controller.mint(other, 100, {from: factory});
 
-            const balanceBefore = await wbtc.balanceOf(other)
+            const balanceBefore = await btcr.balanceOf(other)
             assert.equal(balanceBefore, 100);
 
             // when burning through factory we only need to approve.
             // here we transfer since checking internally.
-            await wbtc.transfer(controller.address, 20, {from: other})
+            await btcr.transfer(controller.address, 20, {from: other})
             await expectThrow(controller.burn(20, {from: other}));
         });
     });
@@ -260,9 +260,9 @@ contract('Controller', function(accounts) {
             assert.equal(isMerchantAfter, true);
         });
 
-        it("check getWBTC.", async function () {
-            const gotWBTC =  await controller.getWBTC();
-            assert.equal(gotWBTC, wbtc.address);
+        it("check getBTCR.", async function () {
+            const gotBTCR =  await controller.getBTCR();
+            assert.equal(gotBTCR, btcr.address);
         });
     });
 });

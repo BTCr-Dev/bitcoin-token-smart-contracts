@@ -9,8 +9,8 @@ require("chai")
 
 contract('Deployer', function(accounts) {
 
-    it("test WBTC deployer script on private net.", async function () {
-        await deployer.deploy("deployerInputTestrpc.json", 20, web3.currentProvider.host, false, "WBTC");
+    it("test BTCR deployer script on private net.", async function () {
+        await deployer.deploy("deployerInputTestrpc.json", 20, web3.currentProvider.host, false, "BTCR");
     });
 
     it("test WXRP deployer script on private net.", async function () {

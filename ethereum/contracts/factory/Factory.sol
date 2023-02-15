@@ -10,7 +10,7 @@ contract Factory is OwnableContract {
 
     struct Request {
         address requester; // sender of the request.
-        uint amount; // amount of wbtc to mint/burn.
+        uint amount; // amount of btcr to mint/burn.
         string btcDepositAddress; // custodian's btc address in mint, merchant's btc address in burn.
         string btcTxid; // bitcoin txid for sending/redeeming btc in the mint/burn process.
         uint nonce; // serial number allocated for each request.
@@ -233,7 +233,7 @@ contract Factory is OwnableContract {
         burnRequestNonce[requestHash] = nonce; 
         burnRequests.push(request);
 
-        require(controller.getWBTC().transferFrom(msg.sender, controller, amount), "trasnfer tokens to burn failed");
+        require(controller.getBTCR().transferFrom(msg.sender, controller, amount), "trasnfer tokens to burn failed");
         require(controller.burn(amount), "burn failed");
 
         emit Burned(nonce, msg.sender, amount, btcDepositAddress, timestamp, requestHash);

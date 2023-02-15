@@ -32,7 +32,7 @@ module.exports.deploy = async function (inputFile, gasPriceGwei, rpcUrl, dontSen
         "Factory.sol" : fs.readFileSync(factoryContractPath + 'Factory.sol', 'utf8'),
         "Members.sol" : fs.readFileSync(factoryContractPath + 'Members.sol', 'utf8'),
         "MembersInterface.sol" : fs.readFileSync(factoryContractPath + 'MembersInterface.sol', 'utf8'),
-        "WBTC.sol" : fs.readFileSync(tokenContractPath + 'WBTC.sol', 'utf8')
+        "BTCR.sol" : fs.readFileSync(tokenContractPath + 'BTCR.sol', 'utf8')
     };
 
     function findImports (_path) {
@@ -182,7 +182,7 @@ module.exports.deploy = async function (inputFile, gasPriceGwei, rpcUrl, dontSen
         /////////////////////////////////////////////////////////////
 
         let tokenAddress, tokenContract;
-        [tokenAddress, tokenContract] = await deployContract(output, "WBTC.sol:WBTC", []);
+        [tokenAddress, tokenContract] = await deployContract(output, "BTCR.sol:BTCR", []);
         console.log("tokenAddress: " + tokenAddress);
 
         let controllerAddress, controllerContract;

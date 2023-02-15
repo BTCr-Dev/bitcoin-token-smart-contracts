@@ -29,7 +29,7 @@ function shouldBehaveLikeMintableToken ([owner, anotherAccount, minter]) {
           await this.token.finishMinting({ from: owner });
         });
 
-        // finish minting should have no affect in WBTC.
+        // finish minting should have no affect in BTCR.
         it('returns false', async function () {
           const mintingFinished = await this.token.mintingFinished();
           assert.equal(mintingFinished, false);
@@ -45,12 +45,12 @@ function shouldBehaveLikeMintableToken ([owner, anotherAccount, minter]) {
           it('finishes token minting', async function () {
             await this.token.finishMinting({ from });
 
-            // finish minting should have no affect in WBTC.
+            // finish minting should have no affect in BTCR.
             const mintingFinished = await this.token.mintingFinished();
             assert.equal(mintingFinished, false);
           });
 
-          // finish minting should have no affect in WBTC.
+          // finish minting should have no affect in BTCR.
           it('does not emit a mint finished event', async function () {
             const { logs } = await this.token.finishMinting({ from });
 
@@ -64,7 +64,7 @@ function shouldBehaveLikeMintableToken ([owner, anotherAccount, minter]) {
             await this.token.finishMinting({ from });
           });
 
-          // finish minting should have no affect in WBTC so the below should not revert.
+          // finish minting should have no affect in BTCR so the below should not revert.
           it('does not revert', async function () {
             await this.token.finishMinting({ from });
           });
@@ -123,7 +123,7 @@ function shouldBehaveLikeMintableToken ([owner, anotherAccount, minter]) {
             await this.token.finishMinting({ from: owner });
           });
 
-          // finish minting should have no affect in WBTC so the below should not revert.
+          // finish minting should have no affect in BTCR so the below should not revert.
           it('does not revert', async function () {
             await this.token.mint(owner, amount, { from });
           });
