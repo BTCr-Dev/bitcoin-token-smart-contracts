@@ -5,8 +5,8 @@ import "openzeppelin-solidity/contracts/token/ERC20/DetailedERC20.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/BurnableToken.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/PausableToken.sol";
-import "../token/WrappedToken.sol";
+import "../token/BTCrToken.sol";
 
 
-contract WETH is WrappedToken, DetailedERC20("Wrapped ETH", "WETH", 18) {}
+contract ETHR is BTCrToken, DetailedERC20("ETH Rub", "ETHR", 18) {}
 

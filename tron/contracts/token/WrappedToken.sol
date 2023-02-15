@@ -8,7 +8,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/PausableToken.sol";
 import "../utils/OwnableContract.sol";
 
 
-contract WrappedToken is StandardToken,
+contract BTCrToken is StandardToken,
     MintableToken, BurnableToken, PausableToken, OwnableContract {
 
     function burn(uint value) public onlyOwner {

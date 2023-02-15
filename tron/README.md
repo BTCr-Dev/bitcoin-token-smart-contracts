@@ -1,4 +1,4 @@
-This repository has the contracts that implement the wrapped btc token and wrapped eth token on Tron network.
+This repository has the contracts that implement the BTC Rub token and ETH Rub token on Tron network.
 
 # Installation
 

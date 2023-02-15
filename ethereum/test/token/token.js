@@ -15,7 +15,7 @@ contract('shouldBehaveLikeDetailedERC20', function (accounts) {
         this.detailedERC20 = await Token.new({ from: owner });
     });
 
-    shouldBehaveLikeDetailedERC20(accounts, "Wrapped BTC", "BTCR", 8);
+    shouldBehaveLikeDetailedERC20(accounts, "BTC Rub", "BTCR", 8);
 });
 
 

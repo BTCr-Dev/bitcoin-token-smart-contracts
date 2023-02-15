@@ -4,16 +4,16 @@ import "../utils/OwnableContract.sol";
 import "../utils/OwnableContractOwner.sol";
 import "./ControllerInterface.sol";
 import "../factory/MembersInterface.sol";
-import "../token/WrappedToken.sol";
+import "../token/BTCrToken.sol";
 
 
 contract Controller is ControllerInterface, OwnableContract, OwnableContractOwner {
 
-    WrappedToken public token;
+    BTCrToken public token;
     MembersInterface public members;
     address public factory;
 
-    constructor(WrappedToken _token) public {
+    constructor(BTCrToken _token) public {
         require(_token != address(0), "invalid _token address");
         token = _token;
     }

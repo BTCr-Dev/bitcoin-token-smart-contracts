@@ -1,6 +1,6 @@
-This repository has the orginal contracts that implement the wrapped btc token.
+This repository has the orginal contracts that implement the BTC Rub token.
 The contracts in this repo are NOT deployed. You can find the deployed contracts
-for the wrapped btc token on the Ethereum network in [ethereumV2/README.md](../ethereumV2/README.md).
+for the BTC Rub token on the Ethereum network in [ethereumV2/README.md](../ethereumV2/README.md).
 
 # Installation
 
