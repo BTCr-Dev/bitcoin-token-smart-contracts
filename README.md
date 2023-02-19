@@ -1,4 +1,4 @@
-This repository has the contracts that implement the wrapped tokens.
+This repository has the contracts that implement the btcrub tokens.
 
 # Ethereum network
 [ethereumV2/README.md](ethereumV2/README.md)
